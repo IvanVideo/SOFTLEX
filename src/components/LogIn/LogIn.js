@@ -1,18 +1,52 @@
 import './LogIn.css';
+import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
 
 function LogIn() {
+  const [values, setValues] = React.useState({});
+  const [isValid, setIsValid] = React.useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const target = e.target;
+    const name = target.name;
+    const value = target.value;
+    setValues({ ...values, [name]: value });
+    setIsValid(target.closest("form").checkValidity());
+  }
+
+  const handleSubmitForm = (e) => {
+    e.preventDefault();
+    navigate('/page1');
+  }
+
   return (
-    <section>
-      <h1 className='logIn__title'>Тестовая работа</h1>
-      <p className='logIn__subtitle'>Рамазанов Иван</p>
-      <article>
-        <form className='form logIn__form'>
-          <label>Login</label>
-          <input className='form__input'></input>
-          <label>Password</label>
-          <input></input>
+    <section className='logIn'>
+      <div className='logIn__conteiner'>
+        <h1 className='logIn__title'>Тестовая работа</h1>
+        <p className='logIn__subtitle'>Рамазанов Иван</p>
+        <form className='form logIn__form' onSubmit={handleSubmitForm}>
+          <div className='form__box'>
+            <label className='form__lable'>Login</label>
+            <input
+              className='form__input'
+              name="Login"
+              onChange={handleChange}
+              minLength={2}
+              required />
+          </div>
+          <div className='form__box'>
+            <label className='form__lable'>Password</label>
+            <input
+              className='form__input'
+              name="Password"
+              onChange={handleChange}
+              minLength={3}
+              required />
+          </div>
+          <button className={isValid ? 'form__button' : 'form__button_hide'}>Войти</button>
         </form>
-      </article>
+      </div>
     </section>
   );
 }
