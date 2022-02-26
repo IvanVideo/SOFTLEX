@@ -1,0 +1,15 @@
+.form__input {
+    margin-right: 10px;
+}
+
+.form__input_name {
+    width: 200px;
+}
+
+.form__input_mail {
+    width: 200px;
+}
+
+.form__input_status {
+    width: 200px;
+}
