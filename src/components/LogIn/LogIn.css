@@ -63,3 +63,15 @@
     background-color: #d8d8d8;
     border: none;
 }
+
+.form__variants {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.form__text {
+    margin: 0;
+    width: 150px;
+}

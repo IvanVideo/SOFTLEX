@@ -1,11 +1,10 @@
-import './LogIn.css';
+import './Register.css';
 import { useNavigate, Link } from 'react-router-dom';
 import React, { useEffect } from 'react';
 
-function LogIn() {
+function Register({ registerUser }) {
   const [values, setValues] = React.useState({});
   const [isValid, setIsValid] = React.useState(false);
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const target = e.target;
@@ -17,7 +16,7 @@ function LogIn() {
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    navigate('/page1');
+    registerUser(values)
   }
 
   return (
@@ -30,29 +29,26 @@ function LogIn() {
             <label className='form__lable'>Login</label>
             <input
               className='form__input'
-              name="login"
-              onChange={handleChange}
+              name="Login"
               minLength={2}
+              onChange={handleChange}
               required />
           </div>
           <div className='form__box'>
             <label className='form__lable'>Password</label>
             <input
               className='form__input'
-              name="password"
-              onChange={handleChange}
+              name="Password"
               minLength={3}
+              onChange={handleChange}
               required />
           </div>
-          <button className={isValid ? 'form__button' : 'form__button_hide'}>Войти</button>
-          <div className='form__variants'>
-            <p className='form__text'>Ещё не зарегистрированы?</p>
-            <Link to='/register'>Зарегистрироваться</Link>
-          </div>
+          <button className='form__button'>Войти</button>
+          <Link className='form__link' to='/'>Войти</Link>
         </form>
       </div>
     </section>
   );
 }
 
-export default LogIn;
+export default Register;

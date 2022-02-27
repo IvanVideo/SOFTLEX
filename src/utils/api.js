@@ -11,6 +11,17 @@ class MainApi {
         return Promise.reject(`РћС€РёР±РєР° РЅР° СЃРµСЂРІРµСЂРµ`)
     }
 
+    checkToken(token) {
+        return fetch(`${this._baseUrl}/check`, {
+            credentials: "include",
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        }).then((res) => this._checkResponse(res));
+    }
+
     createCard(data) {
         return fetch(`${this._baseUrl}/item`, {
             credentials: "include",
@@ -29,13 +40,37 @@ class MainApi {
 
     getCards() {
         return fetch(`${this._baseUrl}/items`, {
-          credentials: "include",
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+            credentials: "include",
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
         }).then((res) => this._checkResponse(res));
-      }
+    }
+
+    register(data) {
+        return fetch(`${this._baseUrl}/signup`, {
+            credentials: "include",
+            method: "POST",
+            headers: this._headers,
+            body: JSON.stringify({
+                name: data.Login,
+                password: data.Password,
+            }),
+        }).then((res) => this._checkResponse(res));
+    }
+
+    authorize(data) {
+        return fetch(`${this._baseUrl}/signin`, {
+            credentials: "include",
+            method: "POST",
+            headers: this._headers,
+            body: JSON.stringify({
+                name: data.name,
+                password: data.password,
+            }),
+        }).then((res) => this._checkResponse(res));
+    }
 
 }
 

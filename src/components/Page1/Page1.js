@@ -1,6 +1,5 @@
 import './Page1.css';
 import React, { useEffect } from 'react';
-import data from '../data';
 import Form from '../Form/Form';
 
 function Page1({ createItem, dataItems }) {
