@@ -2,8 +2,10 @@ import './Page1.css';
 import React, { useEffect } from 'react';
 import Form from '../Form/Form';
 
-function Page1({ createItem, dataItems, currentUser, logout, sortData }) {
-    const [visibleItem, setVisibleItem] = React.useState(3);
+const Page1 = ({ createItem, dataItems, currentUser, logout, adminValue }) => {
+    const [visibleItem, setVisibleItem] = React.useState(5); //значение отображаемых строк таблицы
+    const [filterValue, setFilterValue] = React.useState(''); //значение по которому фильтруем данные
+    const [inputVisible, setInputVisible] = React.useState(true);
 
     const showMorItems = () => {
         setVisibleItem(visibleItem + 3);
@@ -12,6 +14,10 @@ function Page1({ createItem, dataItems, currentUser, logout, sortData }) {
     const handleExitProfile = () => {
         logout()
     }
+
+    useEffect(() => {
+    }, [adminValue])
+
 
     return (
         <section className='page1'>
@@ -22,6 +28,13 @@ function Page1({ createItem, dataItems, currentUser, logout, sortData }) {
             <h1 className='page1__title'>Список задач</h1>
             <Form createItem={createItem} />
             <article className='container page1__container'>
+                <div className='page1__filter'>
+                    <input
+                        className='page1__input'
+                        onChange={(e) => { setFilterValue(e.target.value) }}
+                    />
+                    <p className='page1__about'>фильтрация по name, mail, status</p>
+                </div>
                 <table className='table table-bordered page1__table'>
                     <thead>
                         <tr>
@@ -34,7 +47,17 @@ function Page1({ createItem, dataItems, currentUser, logout, sortData }) {
                     <tbody>
                         {
                             dataItems.length > 0 ? (
-                                dataItems.slice(0, visibleItem).map((item, index) => (
+                                dataItems.slice(0, visibleItem).filter((value) => {
+                                    if (filterValue === '') {
+                                        return value
+                                    } else if (
+                                        value.name.toLowerCase().includes(filterValue.toLowerCase()) ||
+                                        value.mail.toLowerCase().includes(filterValue.toLowerCase()) ||
+                                        value.status.toLowerCase().includes(filterValue.toLowerCase())
+                                    ) {
+                                        return value
+                                    }
+                                }).map((item, index) => (
                                     <tr key={index}>
                                         <td className=''>{item.name}</td>
                                         <td className=''>{item.mail}</td>
@@ -46,39 +69,12 @@ function Page1({ createItem, dataItems, currentUser, logout, sortData }) {
                         }
                     </tbody>
                 </table>
-                <button className='page1__button' onClick={showMorItems}>Еще</button>
+                <button
+                    className='page1__button'
+                    onClick={showMorItems}>
+                    Еще
+                </button>
             </article>
-            {/* <section className='page1__container'>
-                {
-                    dataItems === undefined ? null :
-                        (
-                            <table className='table page1__table'>
-                                <thead>
-                                    {
-                                        dataItems.length > 0
-                                            ? <tr>{Object.keys(dataItems[0]).map((item, index) =>
-                                                <th className='table__head' key={index}>{item}</th>)}</tr>
-                                            : null
-                                    }
-                                </thead>
-                                <tbody>
-                                    {
-                                        dataItems.length > 0
-                                            ? (
-                                                dataItems.slice(0, visibleItem).map((row, index) => <tr className='table__row' key={index}>
-                                                    {
-                                                        Object.values(row).map((column, index) =>
-                                                            <td className='table__cell' key={index}>{Object.values(column)}</td>)
-                                                    }
-                                                </tr>))
-                                            : null
-                                    }
-                                </tbody>
-                            </table>
-                        )
-                }
-                <button className='page1__button' onClick={showMorItems}>Еще</button>
-            </section> */}
         </section>
     );
 }

@@ -36,6 +36,7 @@ function Form({ createItem }) {
                 className='form__input form__input_mail'
                 placeholder='mail'
                 name='mail'
+                type='email'
                 required
                 onChange={handleChange}>
             </input>

@@ -44,7 +44,7 @@ function LogIn({ login }) {
               minLength={3}
               required />
           </div>
-          <button className={isValid ? 'form__button' : 'form__button_hide'}>Войти</button>
+          <button disabled={!isValid} className={isValid ? 'form__button' : 'form__button_hide'}>Войти</button>
           <div className='form__variants'>
             <p className='form__text'>Ещё не зарегистрированы?</p>
             <Link to='/register'>Зарегистрироваться</Link>

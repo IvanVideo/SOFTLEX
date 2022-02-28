@@ -8,7 +8,8 @@ class MainApi {
         if (res.ok) {
             return res.json()
         }
-        return Promise.reject(`РћС€РёР±РєР° РЅР° СЃРµСЂРІРµСЂРµ`)
+        return Promise.reject(new Error(res.statusText))
+        // return Promise.reject(new Error(`Ошибка ${res.status} : ${res.statusText}`))
     }
 
     checkToken(token) {

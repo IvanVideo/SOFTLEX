@@ -43,7 +43,7 @@ function Register({ registerUser }) {
               onChange={handleChange}
               required />
           </div>
-          <button className='form__button form__button_register'>Зарегестрировать</button>
+          <button disabled={!isValid} className={isValid ? 'form__button form__button_register' : 'form__button_hide-register'}>Зарегестрировать</button>
           <Link className='form__link' to='/'>Войти</Link>
         </form>
       </div>

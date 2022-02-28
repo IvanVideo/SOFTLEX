@@ -13,6 +13,17 @@
     padding-top: 20px;
 }
 
+.page1__filter {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+
+.page1__about {
+    margin: 0 0 0 10px;
+    font-size: 10px;
+}
+
 .page1__button {
     padding: 5px 0 0 0;
     font-size: 16px;
@@ -26,6 +37,10 @@
     font-weight: bold;
 }
 
+.page1__input {
+    width: 200px;
+}
+
 .page1__table {
     margin: 0 auto 20px;
 }
@@ -36,7 +51,7 @@
 }
 
 .page1__container {
-    margin-top: 20px;
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
 }

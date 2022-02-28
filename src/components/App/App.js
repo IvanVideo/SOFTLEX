@@ -11,6 +11,7 @@ function App() {
   const [data, setData] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState([]);
+  const [adminValue, setAdminValue] = React.useState(false);
   const navigate = useNavigate();
 
   const tokenCheck = React.useCallback(() => {
@@ -45,8 +46,9 @@ function App() {
   }, [loggedIn]);
 
   useEffect(() => {
-    // console.log(currentUser)
-    // if(currentUser.name === 'admin')
+    if (currentUser.name === 'admin') {
+      setAdminValue(false);
+    }
   }, [currentUser]);
 
   const createItem = (card) => {
@@ -96,7 +98,7 @@ function App() {
         <Route path='/' element={<LogIn login={login} />} />
         <Route path='/register' element={<Register registerUser={registerUser} />} />
         <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-          <Route path='/page1' element={<Page1 createItem={createItem} dataItems={data} currentUser={currentUser} logout={logout} />} />
+          <Route path='/page1' element={<Page1 createItem={createItem} dataItems={data} currentUser={currentUser} logout={logout} adminValue={adminValue} />} />
         </Route>
       </Routes>
     </div>
