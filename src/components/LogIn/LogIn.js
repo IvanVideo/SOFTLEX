@@ -2,7 +2,7 @@ import './LogIn.css';
 import { useNavigate, Link } from 'react-router-dom';
 import React, { useEffect } from 'react';
 
-function LogIn() {
+function LogIn({ login }) {
   const [values, setValues] = React.useState({});
   const [isValid, setIsValid] = React.useState(false);
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function LogIn() {
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    navigate('/page1');
+    login(values)
   }
 
   return (

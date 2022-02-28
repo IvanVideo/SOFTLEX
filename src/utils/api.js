@@ -54,8 +54,8 @@ class MainApi {
             method: "POST",
             headers: this._headers,
             body: JSON.stringify({
-                name: data.Login,
-                password: data.Password,
+                name: data.name,
+                password: data.password,
             }),
         }).then((res) => this._checkResponse(res));
     }

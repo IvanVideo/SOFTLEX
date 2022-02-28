@@ -29,7 +29,7 @@ function Register({ registerUser }) {
             <label className='form__lable'>Login</label>
             <input
               className='form__input'
-              name="Login"
+              name="login"
               minLength={2}
               onChange={handleChange}
               required />
@@ -38,12 +38,12 @@ function Register({ registerUser }) {
             <label className='form__lable'>Password</label>
             <input
               className='form__input'
-              name="Password"
+              name="password"
               minLength={3}
               onChange={handleChange}
               required />
           </div>
-          <button className='form__button'>Войти</button>
+          <button className='form__button form__button_register'>Зарегестрировать</button>
           <Link className='form__link' to='/'>Войти</Link>
         </form>
       </div>

@@ -20,6 +20,7 @@ function App() {
         .then((res) => {
           setCurrentUser(res);
           setLoggedIn(true);
+          navigate('/page1');
         })
         .catch((err) => {
           console.log(err);
@@ -39,6 +40,15 @@ function App() {
       })
   }, [])
 
+  useEffect(() => {
+    tokenCheck();
+  }, [loggedIn]);
+
+  useEffect(() => {
+    // console.log(currentUser)
+    // if(currentUser.name === 'admin')
+  }, [currentUser]);
+
   const createItem = (card) => {
     mainApi.createCard(card)
       .then((item) => {
@@ -51,7 +61,7 @@ function App() {
 
   //Регистрация пользователя
   const registerUser = (data) => {
-    return mainApi.register(data)
+    return mainApi.register({ name: data.login, password: data.password })
       .then((res) => {
         login(data);
       })
@@ -62,9 +72,8 @@ function App() {
 
   //Логин пользователя
   const login = (data) => {
-    return mainApi.authorize({ name: data.Login, password: data.Password })
+    return mainApi.authorize({ name: data.login, password: data.password })
       .then((res) => {
-        console.log(res.token, 'УРА!')
         localStorage.setItem("token", res.token);
         setLoggedIn(true);
         tokenCheck();
@@ -75,13 +84,19 @@ function App() {
       });
   };
 
+  //Выход пользователя
+  const logout = () => {
+    localStorage.removeItem("token");
+    setLoggedIn(false);
+  }
+
   return (
     <div>
       <Routes>
-        <Route path='/' element={<LogIn />} />
+        <Route path='/' element={<LogIn login={login} />} />
         <Route path='/register' element={<Register registerUser={registerUser} />} />
         <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-          <Route path='/page1' element={<Page1 createItem={createItem} dataItems={data} />} />
+          <Route path='/page1' element={<Page1 createItem={createItem} dataItems={data} currentUser={currentUser} logout={logout} />} />
         </Route>
       </Routes>
     </div>

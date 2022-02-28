@@ -10,13 +10,18 @@ function Form({ createItem }) {
         const name = target.name;
         const value = target.value;
         setValues({ ...values, [name]: value });
-        setIsValid(target.closest("form").checkValidity());
     }
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
         createItem(values);
     }
+
+    useEffect(() => {
+        if (values.name && values.mail && values.text && values.status) {
+            setIsValid(true)
+        }
+    }, [values])
 
     return (
         <form onSubmit={handleSubmitForm}>
@@ -41,13 +46,15 @@ function Form({ createItem }) {
                 required
                 onChange={handleChange}>
             </input>
-            <input
-                className='form__input form__input_status'
-                placeholder='status'
+            <select
+                className='form__input_status'
                 name='status'
+                defaultValue={'ok'}
                 required
                 onChange={handleChange}>
-            </input>
+                <option value='ok'>ok</option>
+                <option>false</option>
+            </select>
             <button disabled={!isValid} className={isValid ? 'form__button' : 'form__button_hide'}>Add</button>
         </form>
     );
