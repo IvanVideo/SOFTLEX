@@ -1,12 +1,12 @@
 import './LogIn.css';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React, { useEffect } from 'react';
 
 function LogIn({ login }) {
   const [values, setValues] = React.useState({});
   const [isValid, setIsValid] = React.useState(false);
-  const navigate = useNavigate();
 
+  //Записываем все значения полей
   const handleChange = (e) => {
     const target = e.target;
     const name = target.name;
@@ -15,6 +15,7 @@ function LogIn({ login }) {
     setIsValid(target.closest("form").checkValidity());
   }
 
+  //Сабмитим форму
   const handleSubmitForm = (e) => {
     e.preventDefault();
     login(values)

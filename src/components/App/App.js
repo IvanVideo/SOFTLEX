@@ -8,12 +8,14 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import mainApi from '../../utils/api';
 
 function App() {
-  const [data, setData] = React.useState([]);
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState([]);
-  const [adminValue, setAdminValue] = React.useState(false);
+  const [data, setData] = React.useState([]); // массив списка задач
+  const [loggedIn, setLoggedIn] = React.useState(false); // состояние логирования
+  const [currentUser, setCurrentUser] = React.useState([]); // информация о залогированном пользователе
+  const [adminValue, setAdminValue] = React.useState(null); // отслеживаем залогинен ли админ
+  const [error, setError] = React.useState(false); // статус ошибки запроса
   const navigate = useNavigate();
 
+  //проверка токена пользователя 
   const tokenCheck = React.useCallback(() => {
     const jwt = localStorage.getItem("token");
     if (jwt && jwt !== null) {
@@ -31,6 +33,7 @@ function App() {
     }
   });
 
+  // rest api запрос на получение массива задач
   useEffect(() => {
     mainApi.getCards()
       .then((cards) => {
@@ -41,16 +44,21 @@ function App() {
       })
   }, [])
 
+  //проверяем токен пользователя после обновления
   useEffect(() => {
     tokenCheck();
   }, [loggedIn]);
 
+  //проверяем админ ли на сайте
   useEffect(() => {
     if (currentUser.name === 'admin') {
-      setAdminValue(false);
+      setAdminValue(true);
+      return
     }
+    setAdminValue(false);
   }, [currentUser]);
 
+  //создаем новую задачу
   const createItem = (card) => {
     mainApi.createCard(card)
       .then((item) => {
@@ -68,6 +76,7 @@ function App() {
         login(data);
       })
       .catch((err) => {
+        setError(true)
         console.log(err);
       });
   };
@@ -79,6 +88,11 @@ function App() {
         localStorage.setItem("token", res.token);
         setLoggedIn(true);
         tokenCheck();
+        if (data.login === 'admin') {
+          setAdminValue(true);
+        } else {
+          setAdminValue(false);
+        }
         navigate('/page1');
       })
       .catch((err) => {
@@ -92,13 +106,31 @@ function App() {
     setLoggedIn(false);
   }
 
+  //Редактирование задачи
+  const editRowTable = (data, id) => {
+    mainApi.changeCard(data, id)
+      .then((cards) => {
+        console.log(cards)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   return (
     <div>
       <Routes>
         <Route path='/' element={<LogIn login={login} />} />
-        <Route path='/register' element={<Register registerUser={registerUser} />} />
+        <Route path='/register' element={<Register registerUser={registerUser} error={error} />} />
         <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-          <Route path='/page1' element={<Page1 createItem={createItem} dataItems={data} currentUser={currentUser} logout={logout} adminValue={adminValue} />} />
+          <Route path='/page1' element={
+            <Page1 createItem={
+              createItem}
+              dataItems={data}
+              currentUser={currentUser}
+              logout={logout}
+              adminValue={adminValue}
+              editRowTable={editRowTable} />} />
         </Route>
       </Routes>
     </div>

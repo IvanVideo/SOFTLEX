@@ -73,3 +73,18 @@
 .page1__button:focus {
     outline: none;
 }
+
+.page1__btn {
+    width: 50px;
+    height: 30px;
+    padding: 0;
+}
+
+.page1__status {
+    display: flex;
+    justify-content: space-between;
+}
+
+.page1__btn_edit {
+    margin-right: 10px;
+}

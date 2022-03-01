@@ -1,11 +1,14 @@
 import './Page1.css';
 import React, { useEffect } from 'react';
 import Form from '../Form/Form';
+import ReadOnlyRow from '../ReadOnlyRow/ReadOnlyRow';
+import EditRow from '../EditRow/EditRow';
 
-const Page1 = ({ createItem, dataItems, currentUser, logout, adminValue }) => {
+const Page1 = ({ createItem, dataItems, currentUser, logout, adminValue, editRowTable, newValue }) => {
     const [visibleItem, setVisibleItem] = React.useState(5); //значение отображаемых строк таблицы
     const [filterValue, setFilterValue] = React.useState(''); //значение по которому фильтруем данные
-    const [inputVisible, setInputVisible] = React.useState(true);
+    const [editItemId, setEditItemId] = React.useState(null); //значение строки, которую будем редактировать
+    const [editFormData, setEditFormData] = React.useState(dataItems);
 
     const showMorItems = () => {
         setVisibleItem(visibleItem + 3);
@@ -15,9 +18,16 @@ const Page1 = ({ createItem, dataItems, currentUser, logout, adminValue }) => {
         logout()
     }
 
-    useEffect(() => {
-    }, [adminValue])
+    const handleEditClick = (e, data) => {
+        setEditItemId(data._id)
+    }
 
+    const handleSaveValue = (e, item, values) => {
+        const itemId = item._id;
+        const newItemValues = { text: values.text, status: values.status }
+        editRowTable(newItemValues, itemId);
+        setEditItemId(null);
+    }
 
     return (
         <section className='page1'>
@@ -35,40 +45,46 @@ const Page1 = ({ createItem, dataItems, currentUser, logout, adminValue }) => {
                     />
                     <p className='page1__about'>фильтрация по name, mail, status</p>
                 </div>
-                <table className='table table-bordered page1__table'>
-                    <thead>
-                        <tr>
-                            <th className=''>name</th>
-                            <th className=''>mail</th>
-                            <th className=''>text</th>
-                            <th className=''>status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            dataItems.length > 0 ? (
-                                dataItems.slice(0, visibleItem).filter((value) => {
-                                    if (filterValue === '') {
-                                        return value
-                                    } else if (
-                                        value.name.toLowerCase().includes(filterValue.toLowerCase()) ||
-                                        value.mail.toLowerCase().includes(filterValue.toLowerCase()) ||
-                                        value.status.toLowerCase().includes(filterValue.toLowerCase())
-                                    ) {
-                                        return value
-                                    }
-                                }).map((item, index) => (
-                                    <tr key={index}>
-                                        <td className=''>{item.name}</td>
-                                        <td className=''>{item.mail}</td>
-                                        <td className=''>{item.text}</td>
-                                        <td className=''>{item.status}</td>
-                                    </tr>
-                                ))
-                            ) : null
-                        }
-                    </tbody>
-                </table>
+                <form onSubmit={(e) => e.preventDefault()}>
+                    <table className='table table-bordered page1__table'>
+                        <thead>
+                            <tr>
+                                <th className=''>name</th>
+                                <th className=''>mail</th>
+                                <th className=''>text</th>
+                                <th className=''>status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                dataItems.length > 0 ? (
+                                    dataItems.slice(0, visibleItem).filter((value) => {
+                                        if (filterValue === '') {
+                                            return value
+                                        } else if (
+                                            value.name.toLowerCase().includes(filterValue.toLowerCase()) ||
+                                            value.mail.toLowerCase().includes(filterValue.toLowerCase()) ||
+                                            value.status.toLowerCase().includes(filterValue.toLowerCase())
+                                        ) {
+                                            return value
+                                        }
+                                    }).map((item, index) => (
+                                        <>
+                                            {
+                                                editItemId === item._id ? (
+                                                    <EditRow item={item} index={index} handleSaveValue={handleSaveValue} />
+                                                )
+                                                    : (
+                                                        <ReadOnlyRow item={item} index={index} adminValue={adminValue} handleEditClick={handleEditClick} editFormData={editFormData} />
+                                                    )
+                                            }
+                                        </>
+                                    ))
+                                ) : null
+                            }
+                        </tbody>
+                    </table>
+                </form>
                 <button
                     className='page1__button'
                     onClick={showMorItems}>

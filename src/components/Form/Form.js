@@ -5,6 +5,7 @@ function Form({ createItem }) {
     const [values, setValues] = React.useState({});
     const [isValid, setIsValid] = React.useState(false);
 
+    //Записываем все значения полей
     const handleChange = (e) => {
         const target = e.target;
         const name = target.name;
@@ -12,11 +13,13 @@ function Form({ createItem }) {
         setValues({ ...values, [name]: value });
     }
 
+    //Сабмитим форму
     const handleSubmitForm = (e) => {
         e.preventDefault();
         createItem(values);
     }
 
+    //Проверяем валидность заполнения формы
     useEffect(() => {
         if (values.name && values.mail && values.text && values.status) {
             setIsValid(true)

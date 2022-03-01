@@ -8,8 +8,7 @@ class MainApi {
         if (res.ok) {
             return res.json()
         }
-        return Promise.reject(new Error(res.statusText))
-        // return Promise.reject(new Error(`Ошибка ${res.status} : ${res.statusText}`))
+        return Promise.reject(new Error(`Ошибка ${res.status} : ${res.statusText}`))
     }
 
     checkToken(token) {
@@ -70,6 +69,21 @@ class MainApi {
                 name: data.name,
                 password: data.password,
             }),
+        }).then((res) => this._checkResponse(res));
+    }
+
+    changeCard(data, id) {
+        return fetch(`${this._baseUrl}/changeItem`, {
+            credentials: "include",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "text": data.text,
+                "status": data.status,
+                "id": id,
+            })
         }).then((res) => this._checkResponse(res));
     }
 
